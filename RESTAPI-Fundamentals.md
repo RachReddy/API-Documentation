@@ -36,14 +36,45 @@ Summary: REST is a architectutal style, it uses http protocol to do comminucatio
 ✅ Data Format: Data is commonly exchanged in JSON, making it easy to understand and process.
 
 ✅ HTTP Methods: REST uses HTTP methods to perform operations on resources.
+
  • GET: Retrieve data.
+ 
  • POST: Create a new resource.
+ 
  • PUT: Update an existing resource.
+ 
  • PATCH: Partially update a resource.
+ 
  • DELETE: Remove a resource
+
+✅  Let's imagine a simple API for managing a list of books:
+
+GET /books: Retrieves a list of all books.
+
+POST /books: Adds a new book to the collection.
+
+GET /books/1: Retrieves the details of the book with ID 1.
+
+PUT /books/1: Updates the information for the book with ID 1.
+
+DELETE /books/1: Deletes the book with ID 1.
  
 ✅ HTTP Status Codes: REST APIs use status codes to indicate the result of a request
+
  • 200 OK: Successful operation.
+ 
  • 201 Created: Resource created successfully.
+ 
  • 404 Not Found: Resource not found.
+ 
  • 500 Internal Server Error: Something went wrong on the server.
+
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REST WITH EXAMPLES
+==================
+
+https://github.com/RachReddy/REST-API-101
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
