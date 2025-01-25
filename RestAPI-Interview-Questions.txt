@@ -6,6 +6,7 @@
   PUT: Fully update an existing resource.
   PATCH: Partially update an existing resource.
   DELETE: Remove a resource.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 2. What is the difference between PUT and PATCH?
 
@@ -32,3 +33,41 @@
 Simple Difference:
 PUT: You send all the data and replace the whole resource.
 PATCH: You send only the data you want to change (like just the name).
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. What are status codes in HTTP? Can you list and explain the significance of 200, 201, 400, 401, 403, 404, and 500 status codes?
+
+    200 OK
+      Meaning: The request was successful, and the server is returning the requested data.
+      Example: A successful login response: 200 OK.
+
+    201 Created
+      Meaning: The request was successful, and a new resource was created as a result.
+      Example: A new user is created: 201 Created.
+
+    400 Bad Request
+      Meaning: The server could not understand the request due to invalid syntax.
+      Example: Trying to submit a form with missing required fields: 400 Bad Request.
+
+    401 Unauthorized
+      Meaning: The request requires authentication, but the user has not provided valid credentials.
+      Example: Trying to access a profile page without logging in: 401 Unauthorized.
+
+    403 Forbidden
+      Meaning: The server understood the request, but the client does not have permission to access the resource.
+      Example: A regular user trying to access an admin-only page: 403 Forbidden.
+
+    404 Not Found
+      Meaning: The server cannot find the requested resource.
+      Example: Visiting a broken or incorrect URL: 404 Not Found.
+
+    500 Internal Server Error
+      Meaning: The server encountered an unexpected condition that prevented it from fulfilling the request.
+      Example: A server crash while processing a request: 500 Internal Server Error.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
