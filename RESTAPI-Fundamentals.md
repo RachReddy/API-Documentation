@@ -23,7 +23,39 @@ What is an API Protocol?
 
 Summary: REST is a architectutal style, it uses http protocol to do comminucation and is stateless and light weight.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+> Why Rest is called Representation?
+
+The term "representational" in Representational State Transfer (REST) refers to the idea that each resource in a REST API is represented by a unique URL, and the client interacts with these representations (such as JSON, XML, etc.) of the resource.
+
+So, when you interact with a RESTful API, you’re not directly manipulating the resource itself on the server—instead, you're working with a "representation" of that resource (like getting a JSON object that represents a user or a product).
+
+*Example*
+---------
+
+Imagine a REST API for a bookstore. The books in the store are resources, and each book has a representation that you can access.
+
+ 1. Resource (Book): Let’s say there’s a book with the title "The Great Gatsby" and an ID of 123.
+
+ 2. Representation: You don’t directly interact with the book itself; instead, you interact with a representation of that book, like a JSON object, which looks like this:
+
+{
+  "id": 123,
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10.99
+}
+
+ 3. URL (Address): The API might expose an endpoint to get this book's representation, such as:
+
+     GET /books/123 → This fetches the book's representation (the JSON).
+
+In REST, representations are how you interact with the resources. You’re always working with a copy of the resource’s state (like that JSON), not the actual resource itself. That's why it's called Representational State Transfer (REST).
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 • REST APIs are like waiters in a restaurant—bridging the gap between your requests and the server's response.
  1. You tell the waiter what you want. (You make a request)
