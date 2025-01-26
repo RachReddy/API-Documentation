@@ -66,8 +66,501 @@ PATCH: You send only the data you want to change (like just the name).
     500 Internal Server Error
       Meaning: The server encountered an unexpected condition that prevented it from fulfilling the request.
       Example: A server crash while processing a request: 500 Internal Server Error.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-4. 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. How would you handle versioning in a REST API?
 
+      API versioning => manages changes made in an API over time without breaking existing clients.
+
+      a) URI Path Versioning (Most Common) :  the version number is included directly in the URL path. 
+         eg: /api/v1/resources
+             /api/v2/resources
+
+        Adv: Clear and straightforward to understand. Easy to implement and widely used. Allows clients to choose which version to interact with.
+        Disadv: Can lead to URL clutter if multiple versions are maintained over time.
+
+      b) Query Parameter Versioning : The version is specified as a query parameter.
+          eg: e.g., /api/resources?version=1
+
+      c) Header Versioning (Accept Header): Instead of using the URL, versioning can be done through HTTP headers, usually in the Accept header or a custom header.
+          Nite: good for simpler APIs or when versioning needs to be optional or non-intrusive.
+          eg: , Accept: application/vnd.myapi.v1+json
+          Adv: Keeps the URL structure clean
+         
+      d) Content-Type Versioning: Similar to header versioning, but instead of relying on the Accept header, versioning is specified in the Content-Type header.
+           eg: Content-Type: application/vnd.myapi.v1+json
+
+      e) No Versioning (URI Stability) : evolving without explicit versioning
+        - Clients can always use the most up-to-date version without needing to specify it.
+        eg: /api/resources
+     
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. What are the key constraints of RESTful APIs? How does REST differ from other architectural styles?
+    
+    Key Constraints of RESTful APIs:
+    
+    1. Statelessness: Each request from a client contains all necessary information; the server doesn't store client context.
+    2. Client-Server: The client and server are separate, with distinct responsibilities (UI vs. data processing).
+    3. Cacheability: Responses can be marked as cacheable to improve performance.
+    4. Uniform Interface: Uses standard HTTP methods (GET, POST, PUT, DELETE) to interact with resources.
+    5. Layered System: The architecture can include layers (e.g., proxies) without affecting client-server communication.
+    6. Code on Demand (Optional): The server can send executable code (e.g., JavaScript) to the client.
+
+    How REST Differs from Other Architectural Styles:
+    
+    SOAP: A protocol with strict standards (XML, security features), while REST is more flexible and lightweight.
+    RPC: Focuses on executing remote actions, whereas REST focuses on accessing resources with HTTP methods.
+    GraphQL: Allows clients to query exactly the data they need, while REST typically returns predefined data from fixed endpoints.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  6. How do you ensure your REST API is stateless?
+
+      To ensure a REST API is stateless, follow these key practices:
+      
+      1. Include all necessary data in each request: Each request should contain everything the server needs to process it (e.g., authentication tokens,   parameters) so the server doesn’t store any client context.
+      
+      2. Use stateless authentication: Implement token-based methods like JWT, where the token holds user information, instead of relying on server-side sessions.
+      
+      3. No session storage: Avoid storing session data on the server. All client-specific information should be passed with each request.
+      
+      4. Design independent requests: Each request should be self-contained, meaning the server doesn't need to remember anything from previous requests.
+      
+      This ensures that every request is treated independently, without the server needing to maintain any client state.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    7. How would you implement authentication and authorization in a RESTful API? What options are available in .NET?
+
+      Authentication : verifying the identity of the user
+      Authorization : determining if a user has permission to access a resource.
+
+      AUTHENTICATION
+      ---------------
+      1. JWT (JSON Web Tokens)
+          The client sends credentials (e.g., username/password) to the server, which then validates them and returns a JWT token.
+          The token is sent with every subsequent request (in the Authorization header) to authenticate the user.
+          The server validates the token on each request and grants access if valid.
+      2.OAuth2:
+          Typically used for third-party authentication (e.g., Google, Facebook).
+          OAuth2 allows authorization tokens to be used for accessing resources without sharing credentials, giving clients limited access to a service.
+
+
+     AUTHORIZATION
+     --------------
+      1. Role-based Access Control (RBAC):
+          Assign roles to users (e.g., Admin, User), and check these roles during API requests to determine if a user has access to certain resources.
+      2. Claims-based Authorization:
+          Use claims within JWT tokens (e.g., "role": "Admin") to make authorization decisions.
+
+Options in .NET for Implementing Authentication and Authorization: JWT Authentication, OAuth2, Role-based & Claims-based Authorization
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+8. Can you explain how to handle pagination, filtering, and sorting in a REST API?
+
+    PAGINATION
+    ------------
+    Purpose: Limits the number of results returned to avoid overwhelming clients with too much data at once.
+    Implementation: Use query parameters to specify the page number and page size (or number of items per page).
+    Example:  GET /api/resources?page=2&size=10
+  
+    Here, page specifies the page number and size the number of items per page. On the server side, you implement logic to fetch the appropriate slice of data based on these values.
+
+
+    FILTERING
+    ----------
+    Purpose: Allows clients to request data that matches certain criteria (e.g., filtering by date, category, etc.).
+    Implementation: Use query parameters to specify filtering conditions.
+    Example:  GET /api/resources?category=books&price<20
+
+    You can allow multiple filters by using various query parameters and handle them on the server to retrieve data that matches the conditions.
+
+
+    SORTING
+    --------
+    Purpose: Enables clients to order the results based on one or more fields (e.g., sort by price, date).
+    Implementation: Use query parameters to specify the sorting field and direction (ascending/descending).
+    Example: GET /api/resources?sort=price,desc
+  
+    Here, sort specifies the field (e.g., price) and the order (asc or desc). The server will apply sorting before sending the response.
+
+
+    Summary:
+    ========
+    Pagination: Use page and size parameters to limit the number of results.
+    Filtering: Use query parameters to define filtering conditions.
+    Sorting: Use sort parameters to specify fields and direction.
+        
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+9. DESIGN QUESTION: How would you design a RESTful API for a blog system with entities like Users, Posts, and Comments?
+
+    1. Define the Entities and Relationships:
+      User: Represents the author of posts and comments.
+      Post: Represents individual blog posts written by users.
+      Comment: Represents comments left on posts by users.
+
+    2. Define the Endpoints:
+
+      Users
+      ------
+      
+      GET /api/users: Retrieve a list of users.
+      GET /api/users/{id}: Retrieve a specific user by ID.
+      POST /api/users: Create a new user.
+      PUT /api/users/{id}: Update user details.
+      DELETE /api/users/{id}: Delete a user.
+
+      Posts:
+      -------
+      
+      GET /api/posts: Retrieve a list of posts (can include pagination, filtering, and sorting).
+      GET /api/posts/{id}: Retrieve a specific post by ID.
+      POST /api/posts: Create a new post (requires authentication to ensure only users can create posts).
+      PUT /api/posts/{id}: Update a post by ID.
+      DELETE /api/posts/{id}: Delete a post.
+
+      Comments:
+      ---------
+      
+      GET /api/posts/{postId}/comments: Retrieve all comments for a specific post.
+      POST /api/posts/{postId}/comments: Add a comment to a specific post.
+      PUT /api/comments/{id}: Update a comment by ID.
+      DELETE /api/comments/{id}: Delete a comment.
+
+   3. Relationships Between Entities:
+
+      A User can have many Posts (one-to-many).
+      A Post can have many Comments (one-to-many).
+      A Comment is related to a Post and a User (many-to-one).
+
+   4. Example of Resource Representation:
+
+      User:
+      {
+        "id": 1,
+        "username": "john_doe",
+        "email": "john@example.com"
+      }
+
+
+      Post:
+      {
+        "id": 1,
+        "title": "My First Post",
+        "content": "This is the content of the first post.",
+        "authorId": 1,
+        "createdAt": "2025-01-26T00:00:00Z"
+      }
+
+
+      Comment:
+      {
+        "id": 1,
+        "postId": 1,
+        "userId": 2,
+        "content": "Great post!",
+        "createdAt": "2025-01-26T00:00:00Z"
+      }
+
+
+   5. Authentication and Authorization:
+      JWT Tokens for authentication (to ensure users are logged in and can only perform authorized actions like creating/updating posts).
+      Role-based Authorization for user permissions (e.g., only the author of a post can update or delete it).
+      
+   6. Best Practices:
+       - Use HTTP Methods Properly: GET (retrieve), POST (create), PUT/PATCH (update), DELETE (remove).
+       - Status Codes: Use proper HTTP status codes like 200 OK, 201 Created, 404 Not Found, 400 Bad Request, 401 Unauthorized.
+       - Pagination, Filtering, Sorting: Implement pagination for large lists (e.g., GET /api/posts?page=1&size=10), support filtering by author or date, and a             allow  sorting.
+
+--------------------------------------------------------
+  Brief Summary:
+====================
+      
+Q: To design a blog system API:
+      
+     1. Define entities like Users, Posts, and Comments.
+     2.  Expose CRUD operations for each entity with clear endpoints.
+     3. Handle relationships (one-to-many between Users/Posts and Posts/Comments).
+     4. Implement JWT-based authentication and role-based authorization.
+     5. Support pagination, filtering, and sorting for better data management.
+     6. This ensures a scalable, organized, and secure REST API.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+================================
+.NET-Specific API Questions
+================================
+1. What is the difference between IHttpActionResult and HttpResponseMessage in ASP.NET Web API?
+
+    a) HttpResponseMessage: You manually create the HTTP response with full control over status codes and content.
+
+            Purpose: Represents an HTTP response message, including the status code, headers, and body.
+            Usage: It's the old, traditional way of returning responses in Web API. You manually set the status code, headers, and conten
+            Example:   public HttpResponseMessage Get()
+                      {
+                          var data = new { Message = "Hello, World!" };
+                          var response = Request.CreateResponse(HttpStatusCode.OK, data); // Create the response
+                          return response; // Return it
+                      }
+
+    Here, you create an HttpResponseMessage, set the status code (OK), and include a data object in the response body.
+
+
+
+    b) IHttpActionResult: A simpler, higher-level approach using predefined helper methods like Ok(), NotFound(), etc., which makes your code cleaner and more     
+    maintainable.
+
+            Purpose: It's an interface that provides a more convenient and abstract way to return HTTP responses. It’s used in newer versions of Web API and makes                       the code cleaner and easier to work with.
+            Usage: You don't have to manually handle status codes and headers. Instead, you return predefined actions like Ok(), BadRequest(), NotFound(), etc.
+            Example:
+                      public IHttpActionResult Get()
+                      {
+                          var data = new { Message = "Hello, World!" };
+                          return Ok(data); // Return a successful response with data
+                      }
+                     
+            Here, instead of creating an HttpResponseMessage, you simply use the Ok() helper method, which automatically creates an HTTP response with a 200     
+            status code and the data.
+
+  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. How do you implement dependency injection in an ASP.NET Core API?
+
+    In ASP.NET Core, DI is built-in and easy to use.
+
+    Steps to Implement Dependency Injection in ASP.NET Core API:
+
+    1. Define a Service (Dependency):
+    ---------------------------------
+      First, you need to create a service that will be injected into your controllers. For example, let’s create a simple service that provides some data.
+
+      Example:
+                  public interface IMyService
+                  {
+                      string GetMessage();
+                  }
+                  
+                  public class MyService : IMyService
+                  {
+                      public string GetMessage()
+                      {
+                          return "Hello from MyService!";
+                      }
+                  }
+
+      Here, we define an interface (IMyService) and a concrete class (MyService) that implements the interface. The service returns a simple message.
+
+
+    2. Register the Service in Dependency Injection Container:
+    -----------------------------------------------------------
+      Next, you need to register your service in the DI container. In ASP.NET Core, this is done in the Startup.cs file, inside the ConfigureServices method.
+
+    Example:
+                public class Startup
+                {
+                    public void ConfigureServices(IServiceCollection services)
+                    {
+                        // Register MyService with the DI container
+                        services.AddScoped<IMyService, MyService>();  // Scoped means one instance per request
+                
+                        // Add other services (like controllers, etc.)
+                        services.AddControllers();
+                    }
+                }
+
+  AddScoped: Registers the service so that a new instance is created per HTTP request. Other options are AddSingleton (one instance for the entire app) or A      
+  AddTransient (new instance every time it's needed).
+
+
+  3. Inject the Service into a Controller:
+  ----------------------------------------
+    Now that the service is registered, you can inject it into any controller that needs it. ASP.NET Core will automatically provide the instance of MyService when the controller is created.
+
+ Example:
+              [ApiController]
+              [Route("api/[controller]")]
+              public class MyController : ControllerBase
+              {
+                  private readonly IMyService _myService;
+              
+                  // Constructor Injection: DI automatically provides the IMyService
+                  public MyController(IMyService myService)
+                  {
+                      _myService = myService;
+                  }
+              
+                  [HttpGet]
+                  public IActionResult GetMessage()
+                  {
+                      // Use the injected service
+                      var message = _myService.GetMessage();
+                      return Ok(message);
+                  }
+              }
+
+
+
+  4. Running the API:
+  ----------------------
+  When you run the API and navigate to GET /api/my, the controller will call the GetMessage method of the MyService and return the message.
+
+
+
+Summary:
+========
+1. Define the service: Create an interface and implementation (e.g., IMyService and MyService).
+2. Register the service: Add the service to the DI container in ConfigureServices (e.g., services.AddScoped<IMyService, MyService>()).
+3. Inject the service: Use constructor injection in your controllers to access the service.
+
+Q: Why Dependency Injection?
+> Testability: It makes unit testing easier since you can inject mock dependencies instead of real ones.
+> Separation of Concerns: Controllers don’t need to create service instances; they just receive them, which keeps the code cleaner and easier to maintain.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. Explain the role of middleware in ASP.NET Core. How can you use it to handle cross-cutting concerns in your API?
+
+    - Middleware is like a series of "checkpoints" or "filters" that each incoming request passes through before reaching your application.
+    - Middleware is code that runs during the request/response cycle. It can do things like logging, error handling, or authentication.
+    - Think of it as a chain where each link (middleware) can perform a task like logging, authentication, or handling errors.
+
+  Examples Uses: Authentication, Logging, Exception handling
+
+  EXAMPLE 1: Invoke() is a middleware
+
+            app.Use(async (context, next) =>
+            {
+                // Perform an action before the next middleware
+                await next.Invoke();
+                // Perform an action after the next middleware
+            });
+
+
+
+  EXAMPLE 2: Logging Middleware
+
+  Let’s say you want to log the details of every incoming request (e.g., the URL requested) and then send it to the client.
+
+  1. Create the Logging Middleware:
+
+            public class LoggingMiddleware
+            {
+                private readonly RequestDelegate _next;
+            
+                public LoggingMiddleware(RequestDelegate next)
+                {
+                    _next = next;
+                }
+            
+                public async Task InvokeAsync(HttpContext context)
+                {
+                    // Log the request
+                    Console.WriteLine($"Request: {context.Request.Path}");
+            
+                    // Pass the request to the next middleware in the chain
+                    await _next(context);
+            
+                    // You can also log the response, if needed
+                    Console.WriteLine($"Response Status: {context.Response.StatusCode}");
+                }
+            }
+
+
+    2. Register Middleware in Startup.cs:
+        You need to tell ASP.NET Core to use this middleware in the Configure method.
+
+          public void Configure(IApplicationBuilder app)
+          {
+              // Add the logging middleware to the pipeline
+              app.UseMiddleware<LoggingMiddleware>();
+          
+              // Continue with other middlewares like routing, etc.
+              app.UseRouting();
+              app.UseEndpoints(endpoints => endpoints.MapControllers());
+          }
+                          
+              
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. How do you configure routing in ASP.NET Core Web API?
+
+    Routing defines how requests are mapped to controller actions. ASP.NET Core uses attribute routing and convention-based routing.
+
+      Attribute Routing:
+      ------------------
+
+      Example:
+
+              [Route("api/[controller]")]
+              public class MyController : ControllerBase
+              {
+                  [HttpGet("{id}")]
+                  public IActionResult Get(int id) => Ok(id);
+              }
+
+      Configure Route in Program.cs:
+      --------------------------------
+
+                app.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. Can you explain how model binding works in ASP.NET Core Web API?
+
+    Model binding automatically maps HTTP request data to action method parameters. It supports data from query strings, route data, form fields, and JSON bodies.
+    Example:
+
+    > For a route like /api/users?id=1, the id parameter is automatically bound:
+        
+        [HttpGet]
+        public IActionResult GetUser(int id) => Ok(id);
+
+    > For JSON in the request body:
+
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] UserModel user) => Ok(user);
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+===================================
+Error Handling and Best Practices
+===================================
+
+
+1. How do you handle errors in a RESTful API? What is your approach to returning meaningful error responses?
+2. What is the purpose of the ProblemDetails class in ASP.NET Core?
+3. How would you implement logging and monitoring in a .NET-based API?
+4. What strategies do you use to ensure API performance and scalability?
+5. How would you secure your API against threats like SQL injection, XSS, or CSRF?
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=====================
+Practical Scenarios
+=====================
+
+
+1. How would you design an API endpoint to upload and retrieve files in .NET?
+2. How do you implement caching in a REST API? Which caching mechanisms are available in .NET?
+3. How would you handle a long-running task in a REST API? What options does .NET provide for such tasks?
+4. If you had to return a large dataset from an API, how would you optimize its performance?
+5. How do you test your APIs? What tools and frameworks do you use for API testing in .NET?
+
+6. How would you implement rate limiting in your API?
+
+7. How do you manage API gateways in microservices architecture?
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
